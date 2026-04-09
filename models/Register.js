@@ -7,11 +7,25 @@ const RegisterSchema = new mongoose.Schema(
       required: [true, "Name is required"],
     },
 
-    //  OPTIONAL + UNIQUE
+    age: {
+      type: Number,
+      required: [true, "Age is required"],
+    },
+   
+    address: {
+      type: String,
+      required: [true, "Address is required"],
+    },
+
+    city: {
+      type: String,
+      required: [true, "City is required"],
+    },
+
     email: {
       type: String,
+      required: [true, "Email is required"],
       unique: true,
-      sparse: true, // important
       trim: true,
     },
 
@@ -23,9 +37,19 @@ const RegisterSchema = new mongoose.Schema(
       unique: true,
     },
 
-    couponCode: {
+    gender: {
       type: String,
-      required: [true, "Code is required"],
+      required: [true, "Gender is required"],
+    },
+
+    profession: {
+      type: String,
+      required: [true, "Profession is required"],
+    },
+
+    visitingDay: {
+      type: String,
+      required: [true, "Visiting day is required"],
     },
 
     regNum: {
@@ -38,17 +62,17 @@ const RegisterSchema = new mongoose.Schema(
       default: false,
     },
 
-    dayOne: {
-      type: String,
-    },
+    // dayOne: {
+    //   type: String,
+    // },
 
-    dayTwo: {
-      type: String,
-    },
+    // dayTwo: {
+    //   type: String,
+    // },
 
-    dayThree: {
-      type: String,
-    },
+    // dayThree: {
+    //   type: String,
+    // },
   },
   { timestamps: true }
 );
