@@ -21,27 +21,27 @@ const allowedOrigins = [
 ];
 
 
-// const corsOptions = {                                                                 
-//   origin: (origin, callback) => {
-//     // allow any origin (including browser requests)
-//     callback(null, true);
-//   },
-//   credentials: true,
-// };
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow server-to-server & Postman
-    if (!origin) return callback(null, true)
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true)
-    }
-    console.error("CORS blocked origin:", origin)
-    return callback(new Error('Not allowed by CORS'))
+const corsOptions = {                                                                 
+  origin: (origin, callback) => {
+    // allow any origin (including browser requests)
+    callback(null, true);
   },
-  credentials: true, // 🔥 REQUIRED for cookies
-}
+  credentials: true,
+};
+
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     // Allow server-to-server & Postman
+//     if (!origin) return callback(null, true)
+
+//     if (allowedOrigins.includes(origin)) {
+//       return callback(null, true)
+//     }
+//     console.error("CORS blocked origin:", origin)
+//     return callback(new Error('Not allowed by CORS'))
+//   },
+//   credentials: true, // 🔥 REQUIRED for cookies
+// }
 
 app.use(cors(corsOptions));
 app.use(express.json());
