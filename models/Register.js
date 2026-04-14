@@ -22,13 +22,6 @@ const RegisterSchema = new mongoose.Schema(
       required: [true, "City is required"],
     },
 
-    email: {
-      type: String,
-      required: [true, "Email is required"],
-      unique: true,
-      trim: true,
-    },
-
     mobile: {
       type: String,
       required: [true, "Mobile is required"],

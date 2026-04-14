@@ -1,6 +1,5 @@
 // controllers/registerController.js
 import Register from "../models/Register.js";
-import sendEmailWithTemplate from "../utils/sendEmail.js";
 import sendRegisterSMS from "../utils/sendRegisterSMS.js";
 //import { Parser } from "json2csv";
 
@@ -14,7 +13,6 @@ export const createRegister = async (req, res) => {
       age,
       address,
       city,
-      email,
       mobile,
       gender,
       profession,
@@ -29,7 +27,6 @@ export const createRegister = async (req, res) => {
       !age ||
       !address ||
       !city ||
-      !email ||
       !mobile ||
       !gender ||
       !profession ||
@@ -41,32 +38,12 @@ export const createRegister = async (req, res) => {
       });
     }
 
-    // Email format
-    const emailRegex = /^\S+@\S+\.\S+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid email format",
-      });
-    }
-
     // Mobile validation
     const mobileRegex = /^\d{10}$/;
     if (!mobileRegex.test(mobile)) {
       return res.status(400).json({
         success: false,
         message: "Mobile must be 10 digits",
-      });
-    }
-
-    // ==========================
-    // DUPLICATE CHECK
-    // ==========================
-    const emailExists = await Register.findOne({ email });
-    if (emailExists) {
-      return res.status(409).json({
-        success: false,
-        message: "Email already registered",
       });
     }
 
@@ -100,7 +77,6 @@ export const createRegister = async (req, res) => {
       age,
       address,
       city,
-      email,
       mobile,
       gender,
       profession,
@@ -109,35 +85,15 @@ export const createRegister = async (req, res) => {
       generateQR: true,
     });
 
-    // ==========================
-    // SEND EMAIL
-    // ==========================
-    await sendEmailWithTemplate({
-      to: register.email,
-      name: register.name,
-      templateKey:
-        "2518b.554b0da719bc314.k1.1124b400-0014-11f1-8765-cabf48e1bf81.19c1d8acb40",
-      mergeInfo: {
-        name: register.name,
-        email: register.email,
-        mobile: register.mobile,
-        regNum: register.regNum,
-        city: register.city,
-        profession: register.profession,
-        visitingDay: register.visitingDay,
-      },
-    });
-
     // SEND SMS
     try {
       //const qrLink = `${process.env.FRONTEND_URL}`;
-      //const qrLink = "https://google.com";
 
       await sendRegisterSMS({
         mobile: register.mobile,
         name: register.name,
         regNum: register.regNum,
-        qrLink: register.regNum,
+        qrLink: "12345",
       });
     } catch (smsError) {
       console.error("Registration SMS failed:", smsError.message);
@@ -230,7 +186,6 @@ export const getRegisterById = async (req, res) => {
 
 //         return {
 //           name: reg.name,
-//           email: reg.email || "",
 //           mobile: reg.mobile,
 //           couponCode: reg.couponCode,
 //           couponName: coupon ? coupon.couponName : "N/A",
@@ -246,7 +201,6 @@ export const getRegisterById = async (req, res) => {
 
 //     const fields = [
 //       { label: "Name", value: "name" },
-//       { label: "Email", value: "email" },
 //       { label: "Mobile", value: "mobile" },
 //       { label: "Coupon Code", value: "couponCode" },
 //       { label: "Coupon Name", value: "couponName" },
