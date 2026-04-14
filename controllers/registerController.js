@@ -130,8 +130,8 @@ export const createRegister = async (req, res) => {
 
     // SEND SMS
     try {
-      //const qrLink = `${process.env.FRONTEND_URL}`;
-      const qrLink = "https://google.com";
+      const qrLink = `${process.env.FRONTEND_URL}`;
+      //const qrLink = "https://google.com";
 
       await sendRegisterSMS({
         mobile: register.mobile,
