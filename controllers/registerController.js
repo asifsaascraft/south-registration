@@ -1,6 +1,7 @@
 // controllers/registerController.js
 import Register from "../models/Register.js";
 import sendEmailWithTemplate from "../utils/sendEmail.js";
+import sendRegisterSMS from "../utils/sendRegisterSMS.js";
 //import { Parser } from "json2csv";
 
 /* ==========================
@@ -114,7 +115,8 @@ export const createRegister = async (req, res) => {
     await sendEmailWithTemplate({
       to: register.email,
       name: register.name,
-      templateKey: "2518b.554b0da719bc314.k1.1124b400-0014-11f1-8765-cabf48e1bf81.19c1d8acb40",
+      templateKey:
+        "2518b.554b0da719bc314.k1.1124b400-0014-11f1-8765-cabf48e1bf81.19c1d8acb40",
       mergeInfo: {
         name: register.name,
         email: register.email,
@@ -125,6 +127,20 @@ export const createRegister = async (req, res) => {
         visitingDay: register.visitingDay,
       },
     });
+
+    // SEND SMS
+    try {
+      const qrLink = `${process.env.FRONTEND_URL}/qr/${register._id}`;
+
+      await sendRegisterSMS({
+        mobile: register.mobile,
+        name: register.name,
+        regNum: register.regNum,
+        qrLink,
+      });
+    } catch (smsError) {
+      console.error("Registration SMS failed:", smsError.message);
+    }
 
     return res.status(201).json({
       success: true,
@@ -189,8 +205,6 @@ export const getRegisterById = async (req, res) => {
     });
   }
 };
-
-
 
 // /* ==========================
 //    Export Registrations CSV
@@ -262,7 +276,6 @@ export const getRegisterById = async (req, res) => {
 //   }
 // };
 
-
 // /* ==========================
 //    Day 1 Delivery
 // ========================== */
@@ -305,7 +318,6 @@ export const getRegisterById = async (req, res) => {
 //     return res.status(500).json({ success: false, message: "Server error" });
 //   }
 // };
-
 
 // /* ==========================
 //    Day 2 Delivery
@@ -350,7 +362,6 @@ export const getRegisterById = async (req, res) => {
 //   }
 // };
 
-
 // /* ==========================
 //    Day 3 Delivery
 // ========================== */
@@ -393,7 +404,6 @@ export const getRegisterById = async (req, res) => {
 //     return res.status(500).json({ success: false, message: "Server error" });
 //   }
 // };
-
 
 // /* ==========================
 //    GET Day 1 Delivered List
