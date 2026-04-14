@@ -130,14 +130,14 @@ export const createRegister = async (req, res) => {
 
     // SEND SMS
     try {
-      const qrLink = `${process.env.FRONTEND_URL}`;
+      //const qrLink = `${process.env.FRONTEND_URL}`;
       //const qrLink = "https://google.com";
 
       await sendRegisterSMS({
         mobile: register.mobile,
         name: register.name,
         regNum: register.regNum,
-        qrLink,
+        qrLink: register.regNum,
       });
     } catch (smsError) {
       console.error("Registration SMS failed:", smsError.message);
