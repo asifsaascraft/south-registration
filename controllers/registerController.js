@@ -86,7 +86,7 @@ export const createRegister = async (req, res) => {
 
     // SEND SMS
     try {
-      const qrLink = `${process.env.FRONTEND_URL}`;
+      const qrLink = `${process.env.BACKEND_URL}/r/${register.regNum}`;
 
       await sendRegisterSMS({
         mobile: register.mobile,
@@ -162,3 +162,24 @@ export const getRegisterById = async (req, res) => {
   }
 };
 
+/* ==========================
+   URL redirect
+========================== */
+export const redirectToQR = async (req, res) => {
+  try {
+    const { regNum } = req.params;
+
+    const register = await Register.findOne({ regNum });
+
+    if (!register) {
+      return res.status(404).send("Invalid QR Link");
+    }
+
+    return res.redirect(
+      `${process.env.FRONTEND_URL}/qr/${register._id}`
+    );
+  } catch (error) {
+    console.error("Redirect Error:", error);
+    return res.status(500).send("Server Error");
+  }
+};
