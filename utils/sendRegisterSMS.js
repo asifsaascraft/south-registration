@@ -3,7 +3,8 @@ import axios from "axios";
 
 const sendRegisterSMS = async ({ mobile, name, regNum, qrLink }) => {
   try {
-    const message = `Dear ${name}, registration id for 6th Edition of Times Property Expo is ${regNum} and QR Links is ${qrLink}. Do not share this info to anyone for security reasons. - SaaScraft Studio`;
+    const message = `Dear ${name}, your registration ID is ${regNum}. Download your QR here: ${qrLink}. Do not share this link. - SaaScraft Studio`;
+
 
     const params = {
       APIKey: process.env.SMS_GATEWAY_API_KEY,
